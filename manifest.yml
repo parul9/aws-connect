@@ -1,0 +1,5 @@
+---
+applications:
+- name: aws-connect
+  memory: 256M
+  buildpack: staticfile_buildpack

@@ -1,0 +1,28 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="utf 8">
+    <title>SAP Service Cloud</title>     
+</head>  
+<body ng-app="app">
+<h1 ng-controller="HelloWorldCtrl"></h1>
+<script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+<script src="awsConnect/connect-streams.js"></script>
+<script>  
+    angular.module("app", []).controller("HelloWorldCtrl", function($scope) {  
+    // $scope.message="Hello World";
+    var containerDiv = document.createElement('div');
+    containerDiv.id = 'containerDiv';
+    containerDiv.style = "width: 310px; height: 470px";
+    document.body.appendChild(containerDiv);
+    connect.core.initCCP(containerDiv, {
+				ccpUrl:        "https://servicecloud-cti.awsapps.com/connect/ccp",        /*REQUIRED*/
+                loginPopup:    true,          /*optional, default TRUE*/
+                softphone:     {              /*optional*/
+                    disableRingtone:  false   /*optional*/
+                }
+        });
+    } )
+</script> 
+</body>  
+</html>
