@@ -5,11 +5,11 @@
     <title>SAP Service Cloud</title>     
 </head>  
 <body ng-app="app">
-<h1 ng-controller="HelloWorldCtrl"></h1>
+<h1 ng-controller="awsConnectCtrl"></h1>
 <script src="https://code.angularjs.org/1.6.9/angular.js"></script>
 <script src="awsConnect/connect-streams.js"></script>
 <script>  
-    angular.module("app", []).controller("HelloWorldCtrl", function($scope) {  
+    angular.module("app", []).controller("awsConnectCtrl", function($scope) {  
     // $scope.message="Hello World";
     var containerDiv = document.createElement('div');
     containerDiv.id = 'containerDiv';
@@ -18,11 +18,33 @@
     connect.core.initCCP(containerDiv, {
 				ccpUrl:        "https://servicecloud-cti.awsapps.com/connect/ccp",        /*REQUIRED*/
                 loginPopup:    true,          /*optional, default TRUE*/
+				loginUrl: "https://servicecloud-cti.awsapps.com/connect/login", 
                 softphone:     {              /*optional*/
-                    disableRingtone:  false   /*optional*/
+                    disableRingtone:  true   /*optional*/
                 }
         });
-    } )
+		
+	var parameters = {};
+	connect.contact(function(contact) {
+			contact.onIncoming = function(incoming) {
+				connections = contact.getConnections();
+				console.log("connection details");
+				console.log(JSON.stringify(connection));
+				connections.forEach(function(connection){
+					let endpoint = connection.getEndpoint();
+					if(endpoint.type === "phone_number") {
+						parameters.ANI = endpoint.phoneNumber;
+						parameters.ExternalReferenceID = endpoint.contactID;
+						parameters.EventType = "Inbound";
+					}
+				});
+			var payload = {"payload":parameters};
+			if(window.parent !== window){
+				window.parent.postMessage(payload, "*");
+				}
+			};
+		});
+	});
 </script> 
 </body>  
 </html>
