@@ -25,16 +25,17 @@
         });
 		
 	var parameters = {};
-	connect.contact(function(contact) {
-			contact.onIncoming = function(incoming) {
-				connections = contact.getConnections();
+
+	connect.contact( function(contact) {
+
+	        connections = contact.getConnections();
 				console.log("connection details");
-				console.log(JSON.stringify(connection));
+				console.log(JSON.stringify(connections));
 				connections.forEach(function(connection){
 					let endpoint = connection.getEndpoint();
 					if(endpoint.type === "phone_number") {
 						parameters.ANI = endpoint.phoneNumber;
-						parameters.ExternalReferenceID = endpoint.contactID;
+						parameters.ExternalReferenceID = connection.contactID;
 						parameters.EventType = "Inbound";
 					}
 				});
@@ -42,7 +43,6 @@
 			if(window.parent !== window){
 				window.parent.postMessage(payload, "*");
 				}
-			};
 		});
 	});
 </script> 
