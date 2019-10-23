@@ -16936,6 +16936,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
 
 },{"../apis/connect-2017-02-15.min":2,"../apis/sts-2011-06-15.min":4,"./browser_loader":8,"./core":10,"./services/sts":43}]},{},[146]);
 
+
 /*! @license sprintf.js | Copyright (c) 2007-2013 Alexandru Marasteanu <hello at alexei dot ro> | 3 clause BSD license */
 
 (function() {
@@ -17072,6 +17073,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
 	ctx.sprintf = sprintf;
 	ctx.vsprintf = vsprintf;
 })();
+
 
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -17517,6 +17519,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.LogComponent = LogComponent;
    connect.DownstreamConduitLogger = DownstreamConduitLogger;
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -18037,6 +18040,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.StateError.prototype.constructor = connect.StateError;
 
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -18310,6 +18314,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.ContactEvents = ContactEvents;
    connect.MasterTopics = MasterTopics;
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -18635,6 +18640,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.Conduit = Conduit;
    connect.IFrameConduit = IFrameConduit;
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -18946,6 +18952,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.AWSClient = AWSClient;
 
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -19112,6 +19119,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.EventGraph = EventGraph;
 
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -20039,6 +20047,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.SoftphoneError = SoftphoneError;
 
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -20813,6 +20822,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.core.AgentDataProvider = AgentDataProvider;
 
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -20888,9 +20898,8 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
          contact.onEnded(lily.hitch(self, self._stopRingtone));
          // Just to make sure to stop the ringtone in case of the failures of specific callbacks(onAccepted,onConnected);
          contact.onRefresh(function(contact){
-          if(contact.getStatus().type !== connect.ContactStatusType.CONNECTING &&
-               contact.getStatus().type !== connect.ContactStatusType.INCOMING){
-              self._stopRingtone();
+          if(contact.getStatus().type !== connect.ContactStatusType.CONNECTING){
+            self._stopRingtone();
           }
          });
       });
@@ -20984,6 +20993,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
    connect.VoiceRingtoneEngine = VoiceRingtoneEngine;
    connect.QueueCallbackRingtoneEngine = QueueCallbackRingtoneEngine;
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -21588,6 +21598,7 @@ AWS.apiLoader.services['sts']['2011-06-15'] = require('../apis/sts-2011-06-15.mi
 
     connect.SoftphoneManager = SoftphoneManager;
 })();
+
 /*
  * Copyright 2014-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *

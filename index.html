@@ -1,50 +1,122 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="utf 8">
-    <title>SAP Service Cloud</title>     
-</head>  
-<body ng-app="app">
-<h1 ng-controller="awsConnectCtrl"></h1>
-<script src="https://code.angularjs.org/1.6.9/angular.js"></script>
-<script src="awsConnect/connect-streams.js"></script>
-<script>  
-    angular.module("app", []).controller("awsConnectCtrl", function($scope) {  
-    // $scope.message="Hello World";
-    var containerDiv = document.createElement('div');
-    containerDiv.id = 'containerDiv';
-    containerDiv.style = "width: 310px; height: 470px";
-    document.body.appendChild(containerDiv);
-    connect.core.initCCP(containerDiv, {
-				ccpUrl:        "https://servicecloud-cti.awsapps.com/connect/ccp",        /*REQUIRED*/
-                loginPopup:    true,          /*optional, default TRUE*/
-				loginUrl: "https://servicecloud-cti.awsapps.com/connect/login", 
-                softphone:     {              /*optional*/
-                    disableRingtone:  true   /*optional*/
-                }
+<html>
+
+<head>
+    <Title>AWS Connect</Title>
+    <script src="awsConnect/connect-streams_old.js"></script>
+
+    <script>
+        //Globals
+        var _contact
+        var _agent
+
+        function bindEvent(element, eventName, eventHandler) {
+            if (element.addEventListener) {
+                element.addEventListener(eventName, eventHandler, false);
+            } else if (element.attachEvent) {
+                element.attachEvent('on' + eventName, eventHandler);
+            }
+        }
+
+        //Listen to messages from parent
+        bindEvent(window, 'message', function (e) {
+            if(e.data === 'SET_TO_AVAILABLE'){
+                setToAvaiable()
+            }
+            //Check event.origin in production
+            //console.log('This message is coming in from: ', e.origin)
+            //Message is in the data
+            //console.log('Received message is ', e.data)
+            
         });
-		
-	var parameters = {};
 
-	connect.contact( function(contact) {
+        var setToAvaiable = function(){
+            console.log('Agent states', _agent.getAgentStates())
+            var routableState = _agent.getAgentStates().filter(function(state) {
+                return state.type === "routable";
+            })[0];
+            _agent.setState(routableState, {
+                success: function() { },
+                failure: function() { }
+            });
+        }
 
-	        connections = contact.getConnections();
+        // Send a message to the parent
+        var sendMessage = function (msg) {
+            window.parent.postMessage(msg, '*');
+        };
+
+        function loadccp() {
+            var ccpUrl = 'https://servicecloud-cti.awsapps.com/connect/ccp'
+            var containerDiv = document.getElementById('containerDiv');
+
+            connect.core.initCCP(containerDiv, {
+                ccpUrl: ccpUrl,
+                loginPopup: true,
+                softphone: {
+                    allowFramedSoftphone: true,
+                    disableRingtone: true
+                }
+            });
+
+            connect.agent(function (agent) {
+                _agent = agent
+            })
+
+            connect.contact(function (contact) {
+                _contact = contact
+				var parameters = {};
+				connections = contact.getConnections();
 				console.log("connection details");
 				console.log(JSON.stringify(connections));
 				connections.forEach(function(connection){
 					let endpoint = connection.getEndpoint();
 					if(endpoint.type === "phone_number") {
 						parameters.ANI = endpoint.phoneNumber;
-						parameters.ExternalReferenceID = connection.contactID;
+						parameters.ExternalReferenceID = _contact.contactId;
 						parameters.EventType = "Inbound";
 					}
 				});
-			var payload = {"payload":parameters};
-			if(window.parent !== window){
+				var payload = {"payload":parameters};
+				if(window.parent !== window){
 				window.parent.postMessage(payload, "*");
 				}
-		});
-	});
-</script> 
-</body>  
+                console.log('Incoming Contact is', contact)
+                contact.onAccepted(function(){
+                    console.log('Call accepted. Incoming contact is', contact)
+                })
+            })
+            
+        }
+
+        function acceptCall() {
+            _contact.accept({
+                success: function (data) {
+                    console.log('Call accepted succesfully', data)
+                },
+                failure: function (err) {
+                    console.log('Error in call', err)
+                }
+            })
+        }
+    </script>
+
+    <head>
+
+    <body onload="loadccp();">
+        <div id="containerDiv">
+        </div>
+<body>
+
+    <style>
+        .ccp {
+            width: 100%;
+            height: 465px;
+            border-width: 0px;
+        }
+        body {
+            margin: 1px;
+            font-family: Sans-Serif
+        }
+    </style>
+
 </html>
